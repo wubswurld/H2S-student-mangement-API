@@ -3,15 +3,52 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const firebase = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
+const request = require('request');
 const app = express();
 const port = process.env.PORT || 3000;
 
 firebase.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: firebase.credential.cert(serviceAccount),
   databaseURL: "https://h2s-student-management.firebaseio.com"
 });
 
 const db = firebase.database();
+
+function getUsers(){
+	request({
+		url: 'https://api.intra.42.fr/oauth/token',
+		method: 'POST',
+		form: {
+			'client_id': 'dd62cec75a850d4785e2ff532a414f773a0493afbbe3e8790be69bf0f2260356',
+			'client_secret': '1d73dedacbd2580beeb88da46586e7354f5bedf4e4583197d835c6fa77708b59',
+			'grant_type': 'client_credentials'
+		}
+	}, (err, res) => {
+		if (res) {
+			let json = JSON.parse(res.body);
+			console.log("Access Token:", json.access_token);
+			let token = json.access_token;
+			
+			request({
+				url: 'https://api.intra.42.fr/v2/users',
+				auth: {
+					'bearer': token
+				}
+			}, (err, res) => {
+				if (res)
+					console.log(res.body);
+				else 
+					console.log(err);
+			});
+		}
+		else {
+			console.log("res undefined");
+			console.log(err);
+		}
+	});
+}
+
+getUsers();
 
 // TODO: Add routes
 /*
@@ -35,5 +72,5 @@ const db = firebase.database();
  */
 
 app.listen(port, () => {
-  consol.log("Server running on port: " + port);
+  console.log("Server running on port: " + port);
 });
