@@ -30,7 +30,7 @@ function getUsers(){
 			let token = json.access_token;
 			
 			request({
-				url: 'https://api.intra.42.fr/v2/users',
+				url: 'https://api.intra.42.fr/v2/cursus/17/users',
 				auth: {
 					'bearer': token
 				}
