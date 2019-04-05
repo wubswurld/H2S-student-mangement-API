@@ -14,8 +14,38 @@ firebase.initializeApp({
 
 const db = firebase.database();
 
-function getUsers(){
+/*
+**	callback to display users from intra
+*/
+
+const display_users = (req, err) => {
+	if (req){
+		console.log(req.body);
+	}
+	else{ 
+		console.log(err);
+	}
+}
+
+/*
+**	Make a request to intra, passing in a token for authorization
+*/
+
+const intraRequest = (token, requestString, callback) => {
 	request({
+		url: requestString,
+		auth: {
+			'bearer': token
+		}
+	}, callback);
+}
+
+/*
+** authenticates with intra and performs a request
+*/
+
+const authenticateIntraRequest = (requestString, callback) => {
+	let tokenRequest = {
 		url: 'https://api.intra.42.fr/oauth/token',
 		method: 'POST',
 		form: {
@@ -23,23 +53,13 @@ function getUsers(){
 			'client_secret': '1d73dedacbd2580beeb88da46586e7354f5bedf4e4583197d835c6fa77708b59',
 			'grant_type': 'client_credentials'
 		}
-	}, (err, res) => {
+	};
+	request(tokenRequest, (err, res) => {
 		if (res) {
 			let json = JSON.parse(res.body);
 			console.log("Access Token:", json.access_token);
 			let token = json.access_token;
-			
-			request({
-				url: 'https://api.intra.42.fr/v2/cursus/17/users',
-				auth: {
-					'bearer': token
-				}
-			}, (err, res) => {
-				if (res)
-					console.log(res.body);
-				else 
-					console.log(err);
-			});
+			intraRequest(token, requestString, callback);			
 		}
 		else {
 			console.log("res undefined");
@@ -48,7 +68,13 @@ function getUsers(){
 	});
 }
 
-getUsers();
+authenticateIntraRequest('https://api.intra.42.fr/v2/cursus/17/users', display_users);
+
+/*
+const save_user = (user) => {
+	let docRef = db.collection('students').doc()	
+} 
+*/
 
 // TODO: Add routes
 /*
