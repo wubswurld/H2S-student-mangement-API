@@ -59,7 +59,8 @@ const authenticateIntraRequest = (requestString, callback) => {
 			let json = JSON.parse(res.body);
 			console.log("Access Token:", json.access_token);
 			let token = json.access_token;
-			intraRequest(token, requestString, callback);			
+      intraRequest(token, requestString, callback);
+      // console.log()	
 		}
 		else {
 			console.log("res undefined");
