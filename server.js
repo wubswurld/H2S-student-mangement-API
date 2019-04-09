@@ -4,6 +4,7 @@ const cors = require("cors");
 const firebase = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
 const request = require('request');
+var fs = require('file-system');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -39,15 +40,6 @@ var token;
 **	callback to display users from intra
 */
 
-// const display_users = (req, err) => {
-// 	if (req){
-// 		console.log(req.body);
-// 	}
-// 	else{ 
-// 		console.log(err);
-// 	}
-// }
-
 /*
 **	Make a request to intra, passing in a token for authorization
 */
@@ -64,6 +56,8 @@ var token;
 /*
 ** authenticates with intra and performs a request
 */
+
+// get student users from intra api, add logins and image url to database.
 
 const authenticateIntraRequest = (requestString, callback) => {
 	let tokenRequest = {
@@ -96,14 +90,20 @@ const authenticateIntraRequest = (requestString, callback) => {
 		}
 	});
 }
+const display_users = (req, err) => {
+	if (req){
+		console.log(req.body)
+	}
+	else{ 
+		console.log(err);
+	}
+}
 
-authenticateIntraRequest('https://api.intra.42.fr/v2/cursus/17/users');
+authenticateIntraRequest('https://api.intra.42.fr/v2/cursus/17/cursus_users?filter[active]=true&filter[campus_id]=7&page[size]=100&per_page', display_users);
 
-// /*
-// const save_user = (user) => {
-// 	let docRef = db.collection('students').doc()	
-// } 
-// */
+const save_user = (user) => {
+	let docRef = db.collection('students').doc()	
+} 
 
 // // TODO: Add routes
 // /*
@@ -126,6 +126,6 @@ authenticateIntraRequest('https://api.intra.42.fr/v2/cursus/17/users');
 //  * 	-> Allows updates to student info; ?? Should we update in Intra
 //  */
 
-// app.listen(port, () => {
-//   console.log("Server running on port: " + port);
-// });
+app.listen(port, () => {
+  console.log("Server running on port: " + port);
+});
