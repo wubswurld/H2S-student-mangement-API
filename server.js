@@ -36,26 +36,12 @@ var token;
 // })
 // console.log(ref);
 
-/*
-**	callback to display users from intra
-*/
 
-/*
-**	Make a request to intra, passing in a token for authorization
-*/
+// callback to display users from intra
 
-// const intraRequest = (token, requestString, callback) => {
-// 	request({
-// 		url: requestString,
-// 		auth: {
-// 			'bearer': token
-// 		}
-// 	}, callback);
-// }
+// Make a request to intra, passing in a token for authorization
+//  authenticates with intra and performs a request
 
-/*
-** authenticates with intra and performs a request
-*/
 
 // get student users from intra api, add logins and image url to database.
 
