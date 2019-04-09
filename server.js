@@ -7,6 +7,21 @@ const request = require('request');
 var fs = require('file-system');
 const app = express();
 const port = process.env.PORT || 3000;
+const projid = [
+	{ id: 1132, name: "OOP" },
+	{ id: 1175, name: "WEBDEV" },
+	{ id: 1200, name: "APCSP" },
+	{ id: 1172, name: "GAME2" },
+	{ id: 1107, name: "ALGPUZ" },
+	{ id: 1109, name: "HACKADV" },
+	{ id: 1141, name: "PYTHON" },
+	{ id: 1295, name: "NODE" },
+	{ id: 1291, name: "PYGAME" },
+	{ id: 1167, name: "GAME1" },
+	{ id: 1283, name: "MCHLRN" },
+	{ id: 1196, name: "POLCALC" },
+	{ id: 1191, name: "DATAMIN" }
+  ];
 
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
