@@ -14,31 +14,52 @@ firebase.initializeApp({
 
 const db = firebase.database();
 
+var token;
+// var message = {text: 'hey guys', timestamp: new Date().toString()};
+// var ref = firebase.database().ref().child('MainChild');
+// var logsref = ref.child('logs');
+
+// ref.child(logsref.key).set(message);
+
+// logsref.orderByKey().limitToLast(1).on('child_added', function(snap) {
+// 	console.log('added', snap.val())
+// });
+// logsref.on('child_removed', function(snap) {
+// 	console.log('removed', snap.val());
+// });
+// ref.child('logs').on('child_changed', function(snap) {
+// 	console.log('changed', snap.val());
+// });
+// ref.child('logs').on('value', function(snap) {
+// 	console.log('value', snap.val());
+// })
+// console.log(ref);
+
 /*
 **	callback to display users from intra
 */
 
-const display_users = (req, err) => {
-	if (req){
-		console.log(req.body);
-	}
-	else{ 
-		console.log(err);
-	}
-}
+// const display_users = (req, err) => {
+// 	if (req){
+// 		console.log(req.body);
+// 	}
+// 	else{ 
+// 		console.log(err);
+// 	}
+// }
 
 /*
 **	Make a request to intra, passing in a token for authorization
 */
 
-const intraRequest = (token, requestString, callback) => {
-	request({
-		url: requestString,
-		auth: {
-			'bearer': token
-		}
-	}, callback);
-}
+// const intraRequest = (token, requestString, callback) => {
+// 	request({
+// 		url: requestString,
+// 		auth: {
+// 			'bearer': token
+// 		}
+// 	}, callback);
+// }
 
 /*
 ** authenticates with intra and performs a request
@@ -58,10 +79,17 @@ const authenticateIntraRequest = (requestString, callback) => {
 		if (res) {
 			let json = JSON.parse(res.body);
 			console.log("Access Token:", json.access_token);
-			let token = json.access_token;
-      intraRequest(token, requestString, callback);
-      // console.log()	
-		}
+			token = json.access_token;
+      intraRequest = (token, requestString, callback) => {
+		request({
+			url: requestString,
+			auth: {
+				'bearer': token
+			}
+		}, callback); 
+	};
+	  intraRequest(token, requestString, callback);
+	  }
 		else {
 			console.log("res undefined");
 			console.log(err);
@@ -69,35 +97,35 @@ const authenticateIntraRequest = (requestString, callback) => {
 	});
 }
 
-authenticateIntraRequest('https://api.intra.42.fr/v2/cursus/17/users', display_users);
+authenticateIntraRequest('https://api.intra.42.fr/v2/cursus/17/users');
 
-/*
-const save_user = (user) => {
-	let docRef = db.collection('students').doc()	
-} 
-*/
+// /*
+// const save_user = (user) => {
+// 	let docRef = db.collection('students').doc()	
+// } 
+// */
 
-// TODO: Add routes
-/*
- * 0. POST Add new students (Takes CSV)
- *	-> Should iterate through CSV, check if student exists and create students
- *	-> Should
- *
- * 1. GET Students
- * 	-> Should get all HackHighSchool students' short details from our DB
- *
- * 2. GET Student:id
- * 	-> Should get student details from our DB and from Intra;
- * 	-> Will update projects & check to update user information
- *
- * 3. POST StudentReport:id (Takes JSON)
- * 	-> Send student reports
- *
- * 4. DELETE Student:id
- * 5. PATCH Student:id
- * 	-> Allows updates to student info; ?? Should we update in Intra
- */
+// // TODO: Add routes
+// /*
+//  * 0. POST Add new students (Takes CSV)
+//  *	-> Should iterate through CSV, check if student exists and create students
+//  *	-> Should
+//  *
+//  * 1. GET Students
+//  * 	-> Should get all HackHighSchool students' short details from our DB
+//  *
+//  * 2. GET Student:id
+//  * 	-> Should get student details from our DB and from Intra;
+//  * 	-> Will update projects & check to update user information
+//  *
+//  * 3. POST StudentReport:id (Takes JSON)
+//  * 	-> Send student reports
+//  *
+//  * 4. DELETE Student:id
+//  * 5. PATCH Student:id
+//  * 	-> Allows updates to student info; ?? Should we update in Intra
+//  */
 
-app.listen(port, () => {
-  console.log("Server running on port: " + port);
-});
+// app.listen(port, () => {
+//   console.log("Server running on port: " + port);
+// });
